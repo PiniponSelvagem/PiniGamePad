@@ -1,0 +1,7 @@
+[submodule "PiniCore-Embebded"]
+	path = PiniCore-Embebded
+	url = https://github.com/PiniponSelvagem/PiniCore-Embebded
+	branch = master
+[submodule "firmware/lib/PiniCore"]
+	path = firmware/lib/PiniCore
+	url = https://github.com/PiniponSelvagem/PiniCore-Embebded
