@@ -5,3 +5,7 @@
 [submodule "firmware/lib/PiniCore"]
 	path = firmware/lib/PiniCore
 	url = https://github.com/PiniponSelvagem/PiniCore-Embebded
+[submodule "firmware/lib/ESP32-BLE-Gamepad"]
+	path = firmware/lib/ESP32-BLE-Gamepad
+	url = https://github.com/PiniponSelvagem/ESP32-BLE-Gamepad
+	branch = master

@@ -16,10 +16,8 @@ void AP::setup() {
     sprintf(apSSID, "%s%s", AP_SSID_PREFIX, board.getUniqueId());
 
     WiFi.softAP(apSSID, "");
-    info.connected = getMillis();
 
     server.on("/", [this]() {
-        info.connected = getMillis();
         String uniqueId = String(board.getUniqueId());
         String wifiSSID = memory.getWifiSSID();
         bool emptyWifiPASS = memory.getWifiPASS().isEmpty();
@@ -36,7 +34,6 @@ void AP::setup() {
         content += end;
 
         server.send(200, "text/html", content);
-        info.connected = getMillis();
     });
 
     server.on("/sendWifiData", HTTP_POST, [this]() {
@@ -55,8 +52,7 @@ void AP::setup() {
 
     server.on("/upload", HTTP_POST, [this]() {
         server.sendHeader("Connection", "close");
-        info.connected = getMillis();
-        if (Update.hasError() || m_isValid == 0) {
+        if (Update.hasError()) {
             server.send(500, "text/plain", "error");
         } else {
             server.send(200, "text/plain", "ok");
@@ -97,29 +93,27 @@ void AP::setup() {
     INFO(TAG_AP, "Setup completed");
 }
 
-void AP::loop() {
+bool AP::loop() {
     if (m_isRunning) {
         server.handleClient();
         if (m_restart == 1) {
-            INFO(TAG_AP, "Reboot requested. Rebooting...");
-            delay(5000);
-            WiFi.disconnect();
-            ESP.restart();
+            INFO(TAG_AP, "Reboot requested...");
+            stop();
+            return true;
         }
 
-        if (m_timeoutStartAt!=0 && (getMillis() > (m_timeoutStartAt+AP_TIMEOUT))) {
+        if (m_timeoutStartAt!=0 && (millis() > (m_timeoutStartAt+AP_TIMEOUT))) {
             if (stationsConnected() == 0) {   // only turn off AP when user is not conected
-                WiFi.softAPdisconnect(true);
-                server.stop();
-                WiFi.softAPdisconnect();
-                m_isRunning = false;
-                INFO(TAG_AP, "Timeout reached and no stations currently connected. Terminating HTTP server and WiFi AP.");
+                INFO(TAG_AP, "Timeout reached and no stations currently connected. Reboot requested...");
+                stop();
+                return true;
             }
             else {
-                m_timeoutStartAt = getMillis();
+                m_timeoutStartAt = millis();
             }
         }
     }
+    return false;
 }
 
 uint8_t AP::stationsConnected() {
@@ -128,4 +122,12 @@ uint8_t AP::stationsConnected() {
 void AP::startTimeout() {
     DEBUG(TAG_AP, "Timeout counter started");
     m_timeoutStartAt = getMillis();
+}
+bool AP::isActive() {
+    return m_isRunning;
+}
+
+void AP::stop() {
+    m_isRunning = false;
+    WiFi.enableAP(false);
 }

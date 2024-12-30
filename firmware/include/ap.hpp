@@ -11,52 +11,44 @@
 #include <WebServer.h>
 #include <Update.h>
 
+#include "global.hpp"
+
 inline WebServer server(80);
 
-#define STRINGIFY(x) #x
-#define TOSTRING(x) STRINGIFY(x)
-
-#define AP_DEVICE_TYPE  "PiniGamePad"
-#define AP_DEVICE_EMOJI "🎮"
 #define MOCK_VALUE_PASSWORD_FIELD   "PiniponSelvagem"   // THIS IS USED TO DISPLAY A MOCK PASSWORD ON THE CLIENT SIDE, NEVER SET A REAL PASSWORD ON THIS DEFINE!!!!!!
+
+#define COLOR_ON    "#00AA00"
+#define COLOR_OFF   "#AA0000"
 
 class AP {   
     public:
-        struct information{
-            time_t connected = 0;
-            String serial;
-            String frequency;
-            String version;
-        };
-        information info;
-
         void setup();
-        void loop();
+
+        /**
+         * AP handle state update.
+         * @return If true, then ESP32 should restart as soon as possible.
+         */
+        bool loop();
 
         uint8_t stationsConnected();
         void startTimeout();
 
+        bool isActive();
+
 
     private:
+        void stop();
+
         long m_timeoutStartAt = 0;
         bool m_isRunning = false;
         int m_restart = 0;
-        int m_isValid = 0;
-
-        /*
-         * If in the future flash space is an issue,
-         * you can try reducing space used by removing
-         * unnecessary white spaces.
-         * At the time of writting is not an issue and helps
-         * visualizing the HTML better.
-         */
 
         String start = "<!DOCTYPE html>\n"
             "<html lang=\"en\">\n"
             "<head>\n"
             "    <meta charset=\"UTF-8\">\n"
             "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
-            "    <title>PiniponSelvagem GamePad</title>\n";
+            "    <title>PiniGamePad</title>\n";
         
         String script = "<script>\n"
             "    addEventListener('load', init, false);\n"
@@ -73,10 +65,7 @@ class AP {
             "            $resultOk.style.display = 'none';\n"
             "            $resultNotOk.style.display = 'none';\n"
             "            const data = new FormData();\n"
-            "            data.append('user', document.querySelector('#user').value);\n"
-            "            data.append('password', document.querySelector('#password').value);\n"
             "            data.append('file', document.querySelector('#file').files[0]);\n"
-
             "            const uploadRequest = new XMLHttpRequest();\n"
             "            uploadRequest.open('POST', '/upload');\n"
             "            uploadRequest.upload.addEventListener('progress', e => {\n"
@@ -106,8 +95,6 @@ class AP {
             "                return;\n"
             "            }\n"
             "            const data = new FormData();\n"
-            "            data.append('user', document.querySelector('#user').value);\n"
-            "            data.append('password', document.querySelector('#password').value);\n"
             "            data.append('wifi-ssid', wifiSSID);\n"
             "            data.append('wifi-password', wifiPASS);\n"
             "            const response = await fetch('/sendWifiData', {\n"
@@ -122,8 +109,6 @@ class AP {
             "            }\n"
             "        }\n"
             "    }\n"
-            "    setInterval(fetchCount, 1000);\n"
-            "    fetchCount();\n"
             "</script>\n";
 
             String style = "<style>\n"
@@ -175,7 +160,7 @@ class AP {
             "    <form id=\"ap\" enctype=\"multipart/form-data\">\n"
             "        <table class=\"center\">\n"
             "            <tr>\n"
-            "                <td><h4 style=\"text-align:center\">" AP_DEVICE_EMOJI " " AP_DEVICE_TYPE " " AP_DEVICE_EMOJI "</h4></td>\n"
+            "                <td><h4 style=\"text-align:center\">" DEVICE_EMOJI " " DEVICE_TYPE " " DEVICE_EMOJI "</h4></td>\n"
             "            </tr>\n"
             "            <tr>\n"
             "                <td><h6 style=\"text-align:center\">version: " TOSTRING(FIRMWARE_VERSION) "</h6></td>\n"
