@@ -104,7 +104,6 @@ void setup() {
 
 
 
-
     m_gamepadConfig.setAutoReport(false);
     m_gamepadConfig.setControllerType(CONTROLLER_TYPE_GAMEPAD);
 
@@ -124,15 +123,48 @@ void setup() {
     m_gamepadConfig.setHardwareRevision((char*)DEVICE_HARDWARE_REVISION);
 
     m_gamepad.begin(&m_gamepadConfig);
+
+    pinMode(14, INPUT_PULLUP);
 }
 
+/* Works on Windows / Android */
 void loopGamepad() {
     if (!m_gamepad.isConnected()) return;
-    m_gamepad.sendReport();
+
+    int btn = digitalRead(14);
     
-    TRACE(TAG_MAIN, "sendReport");
-    delay(1000);
+    if (btn == LOW) {
+        m_gamepad.press(BUTTON_4);
+    }
+    else {
+        m_gamepad.release(BUTTON_4);
+    }
+
+    m_gamepad.sendReport();
+    delay(10);
 }
+
+/* Works on Android */
+/*
+int lastState = HIGH;
+void loopGamepad() {
+    if (!m_gamepad.isConnected()) return;
+
+    int currentState = digitalRead(14);
+    if (currentState != lastState) {
+        if (currentState == LOW) {
+            m_gamepad.press(BUTTON_4);
+        } else {
+            m_gamepad.release(BUTTON_4);
+        }
+        lastState = currentState;
+        TRACE(TAG_MAIN, "button changed");
+        m_gamepad.sendReport();
+    }
+    delay(10);
+}
+*/
+
 
 void loop() {
 	vTaskDelay(pdMS_TO_TICKS(1));	// ensure other tasks also get CPU time
