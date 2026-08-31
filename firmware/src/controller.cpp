@@ -19,7 +19,7 @@ using namespace pinicore;
 Controller::Controller() : m_bleHID(DEVICE_TYPE, DEVICE_MANUFACTURER) {}
 
 void Controller::init() {
-    LOG_I(TAG_CONTROLLER, "Setup start");
+    LOG_D(TAG_CONTROLLER, "Setup start");
 
     /* Hardware setup */
     pinMode(AXIS0_SW, INPUT_PULLUP);

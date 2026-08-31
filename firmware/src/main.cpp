@@ -9,10 +9,13 @@ using namespace pinicore;
 Controller controller;
 
 //WiFiComm wifi;
+/*
+// LED test
 int i = 0;
 #define PIN_PWM_R 14
 #define PIN_PWM_G 15
 #define PIN_PWM_B 13
+*/
 
 void setup() {
     Serial.begin(115200);
@@ -37,14 +40,14 @@ void setup() {
     */
 
     controller.init();
-    LOG_I(TAG_MAIN, "PIN_PWM_R");
+    /*
+    // LED test
     pinMode(PIN_PWM_R, OUTPUT);
-    LOG_I(TAG_MAIN, "PIN_PWM_G");
     pinMode(PIN_PWM_G, OUTPUT);
-    LOG_I(TAG_MAIN, "PIN_PWM_B");
     pinMode(PIN_PWM_B, OUTPUT);
+    */
 
-    LOG_I(TAG_MAIN, "Setup complete");
+    LOG_D(TAG_MAIN, "Setup complete");
 }
 
 void loop() {

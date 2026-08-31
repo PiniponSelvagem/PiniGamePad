@@ -1,3 +1,2 @@
 /firmware/.vscode
-firmware/logs
-board
+*.log
