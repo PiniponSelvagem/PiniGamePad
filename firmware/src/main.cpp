@@ -8,15 +8,6 @@ using namespace pinicore;
 
 Controller controller;
 
-//WiFiComm wifi;
-/*
-// LED test
-int i = 0;
-#define PIN_PWM_R 14
-#define PIN_PWM_G 15
-#define PIN_PWM_B 13
-*/
-
 void setup() {
     Serial.begin(115200);
     Serial.println();	// Just to start on a new clean line
@@ -31,49 +22,13 @@ void setup() {
     /* Watchdog setup */
     watchdogSetup(WDTG_INTERNAL_TIMER_IN_SECONDS);
     watchdogEnable();
-    
-    /*
-    wifi.init();
-    wifi.config("MATRIX", "PASSWORD");
-    wifi.enable();
-    wifi.connect();
-    */
 
     controller.init();
-    /*
-    // LED test
-    pinMode(PIN_PWM_R, OUTPUT);
-    pinMode(PIN_PWM_G, OUTPUT);
-    pinMode(PIN_PWM_B, OUTPUT);
-    */
 
     LOG_D(TAG_MAIN, "Setup complete");
 }
 
 void loop() {
     watchdogIamAlive();
-
-    //wifi.maintain();
     controller.loop();
-
-    /*
-    // LED test
-    analogWrite(PIN_PWM_R, i);
-    analogWrite(PIN_PWM_G, i);
-    analogWrite(PIN_PWM_B, ++i);
-    LOG_I(TAG_MAIN, "%d", i);
-    delay(10);
-
-    if (i > 256) {
-        uint64_t timesleep_ns = 10;
-        timesleep_ns = timesleep_ns * 1000000LL; // sec * nano
-        esp_sleep_enable_timer_wakeup(timesleep_ns);
-        LOG_I(TAG_MAIN, "Sleeping...");
-        pinMode(PIN_PWM_R,INPUT);
-        pinMode(PIN_PWM_G,INPUT);
-        pinMode(PIN_PWM_B,INPUT);
-        delay(1000);
-        esp_deep_sleep_start();
-    }
-    */
 }

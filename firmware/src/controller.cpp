@@ -1,7 +1,5 @@
 #include "controller.hpp"
 
-using namespace pinicore;
-
 #define TAG_CONTROLLER  "controller"
 
 #define AXIS0_VRX 36   // VP
@@ -24,12 +22,12 @@ void Controller::init() {
     /* Hardware setup */
     pinMode(AXIS0_SW, INPUT_PULLUP);
     pinMode(AXIS1_SW, INPUT_PULLUP);
-    m_dualAxis0.init(AXIS0_VRX, AXIS0_VRY);
-    m_dualAxis1.init(AXIS1_VRX, AXIS1_VRY);
-    //m_dualAxis2.init(AXIS2_VRX, AXIS2_VRY);
-    m_dualAxis0.calibrate();
-    m_dualAxis1.calibrate();
-    //m_dualAxis2.calibrate();
+    m_dualAxisLS.init(AXIS0_VRX, AXIS0_VRY);
+    m_dualAxisRS.init(AXIS1_VRX, AXIS1_VRY);
+    //m_dualAxisLTRT.init(AXIS2_VRX, AXIS2_VRY);
+    m_dualAxisLS.calibrate();
+    m_dualAxisRS.calibrate();
+    //m_dualAxisLTRT.calibrate();
     
     /* Gamemap setup */
 
@@ -63,12 +61,12 @@ void Controller::loop() {
     if (!m_bleHID.isConnected()) return;
 
     float x0, y0, x1, y1;//, x2, y2;
-    m_dualAxis0.pullEvents();
-    m_dualAxis1.pullEvents();
-    //m_dualAxis2.pullEvents();
-    m_dualAxis0.getAxis(x0, y0);
-    m_dualAxis1.getAxis(x1, y1);
-    //m_dualAxis2.getAxis(x2, y2);
+    m_dualAxisLS.pullEvents();
+    m_dualAxisRS.pullEvents();
+    //m_dualAxisLTRT.pullEvents();
+    m_dualAxisLS.getAxis(x0, y0);
+    m_dualAxisRS.getAxis(x1, y1);
+    //m_dualAxisLTRT.getAxis(x2, y2);
     m_gamepad->setLeftThumb(floatToInt16(x0), floatToInt16(y0));
     m_gamepad->setRightThumb(floatToInt16(x1), floatToInt16(y1));
     //m_gamepad->setLeftTrigger(floatToInt16_trigger(x2));
@@ -92,20 +90,6 @@ void Controller::loop() {
     m_gamepad->sendGamepadReport();
 
     delay(10);
-
-    /*
-    int btn = digitalRead(14);
-    
-    if (btn == LOW) {
-        m_compositeHID.press(BUTTON_4);
-    }
-    else {
-        m_compositeHID.release(BUTTON_4);
-    }
-
-    m_compositeHID.sendReport();
-    delay(10);
-    */
 }
 
 

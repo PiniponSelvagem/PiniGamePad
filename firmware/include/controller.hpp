@@ -41,9 +41,9 @@ class Controller {
         XboxGamepadDevice *m_gamepad;
         BleCompositeHID m_bleHID;
 
-        DualAxis m_dualAxis0;
-        DualAxis m_dualAxis1;
-        //DualAxis m_dualAxis2;
+        DualAxis m_dualAxisLS;      // Left Stick
+        DualAxis m_dualAxisRS;      // Right Stick
+        DualAxis m_dualAxisLTRT;    // Left Trigger (axisX) & Right Trigger (axisY)
 };
 
 

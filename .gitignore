@@ -1,2 +1,3 @@
 /firmware/.vscode
 *.log
+secrets.hpp
