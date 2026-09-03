@@ -1,12 +1,14 @@
-#include "global.hpp"
-#include "controller.hpp"
 #include <pinicore.hpp>
+#include "global.hpp"
+#include "tasks/gamepad.hpp"
+#include "tasks/led.hpp"
 
 using namespace pinicore;
 
 #define TAG_MAIN	"main"
 
-Controller controller;
+TaskGamepad taskGamepad;
+TaskLED taskLED;
 
 void setup() {
     Serial.begin(115200);
@@ -19,16 +21,10 @@ void setup() {
         LOG_E(TAG_MAIN, "\e[1;33mI hit the 'panic' button! Maybe it's time for you to hit the 'learn to code' button?\e[0m");
     }
 
-    /* Watchdog setup */
-    watchdogSetup(WDTG_INTERNAL_TIMER_IN_SECONDS);
-    watchdogEnable();
+    /* Tasks */
+    taskLED.start();
+    taskGamepad.start();
 
-    controller.init();
-
-    LOG_D(TAG_MAIN, "Setup complete");
+    vTaskDelete(NULL);
 }
-
-void loop() {
-    watchdogIamAlive();
-    controller.loop();
-}
+void loop() {}
