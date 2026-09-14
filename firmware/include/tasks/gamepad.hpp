@@ -20,6 +20,7 @@
 #include <pinicore.hpp>
 #include <BleCompositeHID.h>
 #include <XboxGamepadDevice.h>
+#include <PCAL9535A.h>
 
 #include "global.hpp"
 #include "dualaxis.hpp"
@@ -85,6 +86,9 @@ class TaskGamepad : public ITask {
         DualAxis m_dualAxisLS;      // Left Stick
         DualAxis m_dualAxisRS;      // Right Stick
         DualAxis m_dualAxisLTRT;    // Left Trigger (axisX) & Right Trigger (axisY)
+
+        PCAL9535A::PCAL9535A<TwoWire> m_ioA = PCAL9535A::PCAL9535A<TwoWire>(Wire);    // IO expander A
+        PCAL9535A::PCAL9535A<TwoWire> m_ioB = PCAL9535A::PCAL9535A<TwoWire>(Wire);    // IO expander B
 };
 
 

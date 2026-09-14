@@ -26,6 +26,8 @@ void TaskGamepad::init() {
     pinicore::watchdogEnable();
 
     /* Hardware setup */
+    m_ioA.begin(PCAL9535A::HardwareAddress::A000);
+    m_ioB.begin(PCAL9535A::HardwareAddress::A001);
     pinMode(PIN_M0_LSB, INPUT_PULLUP);
     pinMode(PIN_M1_RSB, INPUT_PULLUP);
     m_dualAxisLS.init(PIN_AXIS_LS_A0, PIN_AXIS_LS_A1);
