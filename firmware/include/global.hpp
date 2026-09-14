@@ -17,6 +17,9 @@
  */
 #define XBOX_SERIES_X
 
+#define AP_SSID      DEVICE_TYPE
+#define AP_PASSWORD  ""
+
 /* ESP32 PINs configuration */
 #define PIN_SDA         21 // I2C SDA
 #define PIN_SCL         22 // I2C SCL

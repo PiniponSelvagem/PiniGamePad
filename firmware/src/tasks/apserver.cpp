@@ -9,7 +9,7 @@ void TaskAPServer::init() {
     if (m_initialized) return;
     m_wifi.init();
     m_wifi.enable();
-    m_wifi.configAP("PiniGamepad", "PINI666pt", false);
+    m_wifi.configAP(AP_SSID, AP_PASSWORD, false);
     m_wifi.connectAP();
     m_webServer.begin();
     m_initialized = true;
