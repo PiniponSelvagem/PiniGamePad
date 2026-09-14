@@ -5,12 +5,11 @@
 
 static inline int16_t floatToInt16(float v) {
     v = fmaxf(-1.0f, fminf(1.0f, v));
-    return (int16_t)(v * (v >= 0.0f ? 32767.0f : 32768.0f));
+    return (int16_t)(v * XBOX_STICK_MAX);
 }
-static inline int16_t floatToInt16_trigger(float v) {
-    v = fmaxf(-1.0f, fminf(1.0f, v));
-    float scaled = (v + 1.0f) * 0.5f * 1023.0f;
-    return (uint16_t)(scaled + 0.5f);
+static inline uint16_t floatToInt16_trigger(float v) {
+    v = fminf(fabsf(v), 1.0f);
+    return (uint16_t)(v * XBOX_TRIGGER_MAX);
 }
 
 
@@ -26,7 +25,7 @@ void TaskGamepad::init() {
     pinicore::watchdogSetup(WDTG_INTERNAL_TIMER_IN_SECONDS);
     pinicore::watchdogEnable();
 
-    /* Hardware setup */    
+    /* Hardware setup */
     pinMode(PIN_M0_LSB, INPUT_PULLUP);
     pinMode(PIN_M1_RSB, INPUT_PULLUP);
     m_dualAxisLS.init(PIN_AXIS_LS_A0, PIN_AXIS_LS_A1);
