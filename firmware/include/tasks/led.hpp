@@ -17,10 +17,8 @@
 #define PINICORE_TASK_LED_H
 
 #include <stdint.h>
-#include "ledrgb.hpp"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 #include "tasks/itask.hpp"
+#include "ledrgb.hpp"
 
 class TaskLED : public ITask {
     private:

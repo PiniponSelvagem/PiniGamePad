@@ -1,14 +1,16 @@
 #include <pinicore.hpp>
 #include "global.hpp"
-#include "tasks/gamepad.hpp"
 #include "tasks/led.hpp"
+#include "tasks/gamepad.hpp"
+#include "tasks/apserver.hpp"
 
 using namespace pinicore;
 
 #define TAG_MAIN	"main"
 
-TaskGamepad taskGamepad;
 TaskLED taskLED;
+TaskGamepad taskGamepad;
+TaskAPServer taskAPServer;
 
 void setup() {
     Serial.begin(115200);
@@ -24,6 +26,7 @@ void setup() {
     /* Tasks */
     taskLED.start();
     taskGamepad.start();
+    taskAPServer.start();
 
     vTaskDelete(NULL);
 }
