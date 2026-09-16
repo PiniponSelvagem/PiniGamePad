@@ -42,8 +42,28 @@ class TaskAPServer : public ITask {
          * @brief   Release everything acquired by init(), called once per start(), after the main loop.
          */
         void deinit() override;
-        
-        
+
+        /**
+         * @brief   Handles the 404 page style request.
+         */
+        void onRequestNotFoundStyle();
+
+        /**
+         * @brief   Handles the 404 page request.
+         */
+        void onRequestNotFound();
+
+        /**
+         * @brief   Handles the index page style request.
+         */
+        void onRequestStyle();
+
+        /**
+         * @brief   Handles the index page request.
+         */
+        void onRequestIndex();
+
+
         bool m_initialized = false;
 
         pinicore::WiFiComm m_wifi;
